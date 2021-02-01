@@ -1,7 +1,13 @@
-import React ,{useState,useEffect} from 'react';
-import {Products, Navbar,Cart,CheckOut} from './component';
+import React ,{useState,useEffect,lazy,Suspense} from 'react';
+// import {Products, Navbar,Cart,CheckOut} from './component';
 import { commerce } from "./lib/commerce";
 import {BrowserRouter as Router, Route,Switch} from "react-router-dom"
+import Loading from "./loading"
+
+const Products = lazy(()=>import("./component/products/Products"))
+const Navbar = lazy(()=>import("./component/navbar/navbar"))
+const Cart = lazy(()=>import("./component/cart/Cart"))
+const CheckOut = lazy(()=>import("./component/CheckOutForm/CheckOut/CheckOut"))
 
 const App = () => {
   const [cart,setCart] = useState({});
@@ -41,23 +47,23 @@ const App = () => {
   return (
     <Router>
       <Switch>
-    <div>
-      <Navbar totalItems={cart.total_items}/>
-      <Route exact path="/">
-      <Products products={products} onAddCart={handleAddCart}/>
-      </Route>
-      <Route exact path="/cart">
-      <Cart cart={cart}
-        handleUpdateCart = {handleUpdateCart}
-        handleRemoveCart  = {handleRemoveCart}
-        handleEmptyCart  = { handleEmptyCart}     
-      />
-      </Route>
-      <Route exact path="/checkout">
-        <CheckOut cart={cart}/>
-      </Route>
-    </div>
-    </Switch>
+        <Suspense fallback={<Loading/>}>
+          <Navbar totalItems={cart.total_items}/>
+          <Route exact path="/">
+          <Products products={products} onAddCart={handleAddCart}/>
+          </Route>
+          <Route exact path="/cart">
+          <Cart cart={cart}
+            handleUpdateCart = {handleUpdateCart}
+            handleRemoveCart  = {handleRemoveCart}
+            handleEmptyCart  = { handleEmptyCart}     
+          />
+          </Route>
+          <Route exact path="/checkout">
+            <CheckOut cart={cart}/>
+          </Route>
+        </Suspense>
+      </Switch>
     </Router>
   )
 }

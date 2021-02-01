@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,lazy,Suspense} from 'react'
 import {Typography,Stepper,Step,Paper,StepLabel,CircularProgress,Divider,Button} from "@material-ui/core"
 import AddressForm from "../CheckOut/addressForm"
 import PaymentForm from "../CheckOut/paymentForm"
@@ -38,7 +38,9 @@ const CheckOut = ({cart}) => {
             </Step>
           ))}
         </Stepper>
+        {/* <Suspense fallback={<div>loading</div>}> */}
         {activeState === steps.length ? <Conformation/> : checkoutToken&&<Form/>}
+        {/* </Suspense> */}
       </Paper>
     </main>
       
